@@ -1,10 +1,10 @@
-#include "Paddle.h"
+#include "Ball.h"
 
-// Paddle::Paddle(int x, int y, int height, int width) {
+// Ball::Ball(int x, int y, int height, int width) {
 
 // }
 
-void Paddle::draw(TFT_ST7735* tft) {
+void Ball::draw(TFT_ST7735* tft) {
 	if(redraw) {
 		tft->drawRect(lastX, lastY, width, height, BLACK);
 		tft->drawRect(x, y, width, height, color);
@@ -15,7 +15,7 @@ void Paddle::draw(TFT_ST7735* tft) {
 	}
 }
 
-void Paddle::setX(double _x) {
+void Ball::setX(double _x) {
 	if(clip) {
 		if(_x < 0)
 			_x = 0;
@@ -28,7 +28,7 @@ void Paddle::setX(double _x) {
 	if(x != lastX) redraw = true;
 }
 
-void Paddle::setY(double _y) {
+void Ball::setY(double _y) {
 	if(clip) {
 		if(_y < 0)
 			_y = 0;
@@ -41,22 +41,22 @@ void Paddle::setY(double _y) {
 	if(y != lastY) redraw = true;
 }
 
-void Paddle::forceRedraw() {
+void Ball::forceRedraw() {
 	redraw = true;
 }
 
-void Paddle::changeX(double _x) {
+void Ball::changeX(double _x) {
 	this->setX(x + _x);	
 }
 
-void Paddle::changeY(double _y) {
+void Ball::changeY(double _y) {
 	this->setY(y + _y);	
 }
 
-double Paddle::getX() { return x; }
+double Ball::getX() { return x; }
 
-double Paddle::getY() { return y; }
+double Ball::getY() { return y; }
 
-int Paddle::getWidth() { return width; }
+int Ball::getWidth() { return width; }
 
-int Paddle::getHeight() { return height; }
+int Ball::getHeight() { return height; }

@@ -1,17 +1,17 @@
-#ifndef Paddle_h
-#define Paddle_h
+#ifndef Ball_h
+#define Ball_h
 
 #include <TFT_ST7735.h>
 
-class Paddle {
+class Ball {
 public:
-	Paddle(double _x, double _y, int _width, int _height, uint16_t _color) :
+	Ball(double _x, double _y, int _width, int _height, uint16_t _color) :
 		x(_x), y(_y),
 		lastX(_x), lastY(_y),
 		width(_width), height(_height),
 		color(_color),
 		redraw(false),
-		clip(true) {};
+		clip(false) {};
 
 	void draw(TFT_ST7735*);
 
