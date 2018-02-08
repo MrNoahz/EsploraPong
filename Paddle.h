@@ -1,22 +1,39 @@
 #ifndef Paddle_h
 #define Paddle_h
 
+#include <TFT_ST7735.h>
+
 class Paddle {
-	int width, height;
-	int x, y;
 public:
-	Paddle();
-	Paddle(int, int, int, int);
+	Paddle(double _x, double _y, int _width, int _height, uint16_t _color) :
+		x(_x), y(_y),
+		lastX(_x), lastY(_y),
+		width(_width), height(_height),
+		color(_color),
+		redraw(false),
+		clip(true) {};
 
-	void update();
-	void clear(TFT_ST7735);
-	void render(TFT_ST7735);
+	void draw(TFT_ST7735*);
 
-	int getX() { return x; }
-	int getY() { return y; }
+	double getX();
+	double getY();
 
-	int getWidth() { return width; }
-	int getHeight() { return height; }
-}
+	int getWidth();
+	int getHeight();
+
+	void setX(double);
+	void setY(double);
+
+	void changeX(double);
+	void changeY(double);
+private:
+	double x, y;
+	double lastX, lastY;
+	int width, height;
+	unsigned short color;
+
+	bool redraw;
+	bool clip;
+};
 
 #endif
