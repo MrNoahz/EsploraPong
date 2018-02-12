@@ -25,7 +25,7 @@ void Paddle::setX(double _x) {
 
 	x = _x;
 
-	if(x != lastX) redraw = true;
+	if(x != lastX) this->forceRedraw();
 }
 
 void Paddle::setY(double _y) {
@@ -38,7 +38,7 @@ void Paddle::setY(double _y) {
 
 	y = _y;
 
-	if(y != lastY) redraw = true;
+	if(y != lastY) this->forceRedraw();
 }
 
 void Paddle::forceRedraw() {

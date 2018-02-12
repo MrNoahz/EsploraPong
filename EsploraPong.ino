@@ -33,6 +33,9 @@ Paddle p1(4, 54, 2, 20, WHITE);
 Paddle p2(154, 54, 2, 20, WHITE);
 Ball ball(78, 62, 4, 4, WHITE);
 
+const double paddleSpeed = 0.3;
+const double ballSpeed = 0.1;
+
 void splash() {
 	tft.clearScreen();
 
@@ -98,7 +101,7 @@ void loop() {
 		//------Player 1-----///
 		//p1.setY(map(Esplora.readSlider(), 0, 1024, 110, 0));
 		double joyY = Esplora.readJoystickY();
-		joyY = joyY > 50 ? 0.3 : joyY  < -50 ? -0.3 : 0;
+		joyY = joyY > 50 ? paddleSpeed : joyY  < -50 ? -paddleSpeed : 0;
 
 		Serial.println(p1.getY());
 
@@ -108,7 +111,7 @@ void loop() {
 		p2.setY(map(Esplora.readSlider(), 0, 1024, 110, 0));
 
 		//------Ball------//
-		ball.changeX(1);
+		ball.changeX(ballSpeed);
 
 		// Draw Stuff
 		p1.draw(&tft);
