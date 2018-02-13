@@ -41,10 +41,6 @@ void Ball::setY(double _y) {
 	if(y != lastY) redraw = true;
 }
 
-void Ball::forceRedraw() {
-	redraw = true;
-}
-
 void Ball::changeX(double _x) {
 	this->setX(x + _x);	
 }
@@ -53,10 +49,26 @@ void Ball::changeY(double _y) {
 	this->setY(y + _y);	
 }
 
+void Ball::setVelX(double _vX) {
+	velX = _vX;
+}
+
+void Ball::setVelY(double _vY) {
+	velY = _vY;
+}
+
 double Ball::getX() { return x; }
 
 double Ball::getY() { return y; }
 
+double Ball::getVelX() { return velX; }
+
+double Ball::getVelY() { return velY; }
+
 int Ball::getWidth() { return width; }
 
 int Ball::getHeight() { return height; }
+
+void Ball::forceRedraw() {
+	redraw = true;
+}

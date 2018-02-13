@@ -36,6 +36,16 @@ Ball ball(78, 62, 4, 4, WHITE);
 const double paddleSpeed = 0.3;
 const double ballSpeed = 0.1;
 
+void setup() {
+	Serial.begin(9600);
+	Serial.println("Beginning");
+
+	tft.begin();
+	tft.setRotation(3);
+
+	changeState(SPLASH);
+}
+
 void splash() {
 	tft.clearScreen();
 
@@ -58,26 +68,31 @@ void splash() {
 	tft.print("Move the joystick to start...");
 }
 
-void setup() {
-	Serial.begin(9600);
-	Serial.println("Beginning");
+void changeState(State state) {
+	switch(state) {
+		case SPLASH:
 
-	tft.begin();
-	tft.setRotation(3);
+			break;
+		case GAME:
+			tft.clearScreen();
+			p1.forceRedraw();
+			p2.forceRedraw();
+			ball.forceRedraw();
 
-	splash();
+			ball.setVelX(ballSpeed);
+			ball.setVelY(ballSpeed);
+			break;
+	}
+
+	currentState = state;
 }
 
 void input() {
 	if(currentState == SPLASH) {
 		if(Esplora.readJoystickX() > 60 || Esplora.readJoystickX() < -60 ||
 			Esplora.readJoystickY() > 60 || Esplora.readJoystickY() < -60) {
-			currentState = GAME;
-			tft.clearScreen();
-
-			p1.forceRedraw();
-			p2.forceRedraw();
-			ball.forceRedraw();
+			
+			changeState(GAME);
 		}
 	} else if(currentState == GAME) {
 		
@@ -105,7 +120,8 @@ void update() {
 		p2.setY(map(Esplora.readSlider(), 0, 1024, 110, 0));
 
 		//------Ball------//
-		ball.changeX(ballSpeed);
+		ball.changeX(ball.getVelX());
+		ball.changeY(ball.getVelY());
 	}
 }
 
