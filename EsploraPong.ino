@@ -71,7 +71,7 @@ void splash() {
 void changeState(State state) {
 	switch(state) {
 		case SPLASH:
-
+			splash();
 			break;
 		case GAME:
 			tft.clearScreen();
