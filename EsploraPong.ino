@@ -68,26 +68,8 @@ void setup() {
 	splash();
 }
 
-
-void loop() {
+void input() {
 	if(currentState == SPLASH) {
-		unsigned long currentMillis = millis();
-
-		if(currentMillis - previousBlink >= blinkInterval) {
-			previousBlink = currentMillis;
-
-			if(blinkState == true) {
-				tft.setTextColor(WHITE);
-			} else {
-				tft.setTextColor(BLACK);
-			}
-
-			tft.setCursor(CENTER, 100);
-			tft.print("Move the joystick to start...");
-
-			blinkState = !blinkState;
-		}
-
 		if(Esplora.readJoystickX() > 60 || Esplora.readJoystickX() < -60 ||
 			Esplora.readJoystickY() > 60 || Esplora.readJoystickY() < -60) {
 			currentState = GAME;
@@ -98,12 +80,24 @@ void loop() {
 			ball.forceRedraw();
 		}
 	} else if(currentState == GAME) {
+		
+	}
+}
+
+void update() {
+	if(currentState == SPLASH) {
+		unsigned long currentMillis = millis();
+
+		if(currentMillis - previousBlink >= blinkInterval) {
+			previousBlink = currentMillis;
+
+			blinkState = !blinkState;
+		}
+	} else if(currentState == GAME) {
 		//------Player 1-----///
 		//p1.setY(map(Esplora.readSlider(), 0, 1024, 110, 0));
 		double joyY = Esplora.readJoystickY();
 		joyY = joyY > 50 ? paddleSpeed : joyY  < -50 ? -paddleSpeed : 0;
-
-		Serial.println(p1.getY());
 
 		p1.changeY(joyY);
 
@@ -112,10 +106,24 @@ void loop() {
 
 		//------Ball------//
 		ball.changeX(ballSpeed);
+	}
+}
 
-		// Draw Stuff
+void render() {
+	if(currentState == SPLASH) {
+		tft.setTextColor(blinkState ? WHITE : BLACK);
+
+		tft.setCursor(CENTER, 100);
+		tft.print("Move the joystick to start...");
+	} else if(currentState == GAME) {
 		p1.draw(&tft);
 		p2.draw(&tft);
 		ball.draw(&tft);
 	}
+}
+
+void loop() {
+	input();
+	update();
+	render();
 }
