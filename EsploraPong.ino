@@ -19,9 +19,12 @@ enum State {
 };
 
 // Global vars
-TFT_ST7735 tft = TFT_ST7735(CS, DC, RST);
+const TFT_ST7735 tft = TFT_ST7735(CS, DC, RST);
 
 State currentState = SPLASH;
+
+const uint8_t WIDTH = 160;
+const uint8_t HEIGHT = 128;
 
 // Splash vars
 unsigned long previousBlink = 0;
@@ -29,9 +32,9 @@ const long blinkInterval = 800;
 bool blinkState = false;
 
 // Game vars
-Paddle p1(4, 54, 2, 20, WHITE);
-Paddle p2(154, 54, 2, 20, WHITE);
-Ball ball(78, 62, 4, 4, WHITE);
+const Paddle p1(4, 54, 2, 20, WHITE);
+const Paddle p2(154, 54, 2, 20, WHITE);
+const Ball ball(78, 62, 4, 4, WHITE);
 
 const double paddleSpeed = 0.3;
 const double ballSpeed = 0.1;
@@ -87,6 +90,22 @@ void changeState(State state) {
 	currentState = state;
 }
 
+/* Need a refresher on how basic collision works?
+ * Mozilla has a great guide right here
+ * https://developer.mozilla.org/en-US/docs/Games/Techniques/2D_collision_detection 
+ */
+bool rectCollision(int x1, int y1, 
+					int width1, int height1,
+					int x2, int y2,
+					int width2, int height2) {
+	if(x1 < x2 + width2 &&
+		x1 + width1 > x2 &&
+		y1 < y2 + height2 &&
+		height1 + y1 > y2)
+		return true;
+	return false;
+}
+
 void input() {
 	if(currentState == SPLASH) {
 		if(Esplora.readJoystickX() > 60 || Esplora.readJoystickX() < -60 ||
@@ -120,6 +139,20 @@ void update() {
 		p2.setY(map(Esplora.readSlider(), 0, 1024, 110, 0));
 
 		//------Ball------//
+		if(ball.getX() < 0) ball.setVelX(-ball.getVelX());
+		if(ball.getY() < 0) ball.setVelY(-ball.getVelY());
+		if(ball.getX() + ball.getWidth() > WIDTH) ball.setVelX(-ball.getVelX());
+		if(ball.getY() + ball.getHeight() > HEIGHT) ball.setVelY(-ball.getVelY());
+
+		// Collision between paddle and ball
+		if(rectCollision(ball.getX(), ball.getY(),
+							ball.getWidth(), ball.getHeight(),
+							p1.getX(), p1.getY(),
+							p1.getWidth(), p1.getHeight())) {
+			ball.setVelX(-ball.getVelX());
+			p1.forceRedraw();
+		}
+
 		ball.changeX(ball.getVelX());
 		ball.changeY(ball.getVelY());
 	}
@@ -132,9 +165,9 @@ void render() {
 		tft.setCursor(CENTER, 100);
 		tft.print("Move the joystick to start...");
 	} else if(currentState == GAME) {
+		ball.draw(&tft);
 		p1.draw(&tft);
 		p2.draw(&tft);
-		ball.draw(&tft);
 	}
 }
 
