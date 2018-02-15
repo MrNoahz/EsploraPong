@@ -150,8 +150,23 @@ void update() {
 							p1.getX(), p1.getY(),
 							p1.getWidth(), p1.getHeight())) {
 			ball.setVelX(-ball.getVelX());
+			ball.setX(p1.getX() + p1.getWidth()); // Fixes clipping 
+
 			p1.forceRedraw();
+			//Esplora.tone(262, 100);
 		}
+
+		if(rectCollision(ball.getX(), ball.getY(),
+							ball.getWidth(), ball.getHeight(),
+							p2.getX(), p2.getY(),
+							p2.getWidth(), p2.getHeight())) {
+			ball.setVelX(-ball.getVelX());
+			ball.setX(p2.getX()); // Fixes clipping 
+
+			p2.forceRedraw();
+			//Esplora.tone(262, 100);
+		}
+
 
 		ball.changeX(ball.getVelX());
 		ball.changeY(ball.getVelY());
