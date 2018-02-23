@@ -32,6 +32,9 @@ const long blinkInterval = 800;
 bool blinkState = false;
 
 // Game vars
+uint8_t score1 = 0;
+uint8_t score2 = 0;
+
 const Paddle p1(4, 54, 2, 20, WHITE);
 const Paddle p2(154, 54, 2, 20, WHITE);
 const Ball ball(78, 62, 4, 4, WHITE);
@@ -139,9 +142,9 @@ void update() {
 		p2.setY(map(Esplora.readSlider(), 0, 1024, 110, 0));
 
 		//------Ball------//
-		if(ball.getX() < 0) ball.setVelX(-ball.getVelX());
+		// Bounce off left wall if(ball.getX() < 0) ball.setVelX(-ball.getVelX());
 		if(ball.getY() < 0) ball.setVelY(-ball.getVelY());
-		if(ball.getX() + ball.getWidth() > WIDTH) ball.setVelX(-ball.getVelX());
+		// Bounce off right wall if(ball.getX() + ball.getWidth() > WIDTH) ball.setVelX(-ball.getVelX());
 		if(ball.getY() + ball.getHeight() > HEIGHT) ball.setVelY(-ball.getVelY());
 
 		// Collision between paddle and ball
@@ -167,6 +170,8 @@ void update() {
 			//Esplora.tone(262, 100);
 		}
 
+		if(ball.getX() < 0) score2++;
+		if(ball.getX() + ball.getWidth() > WIDTH) score1++;
 
 		ball.changeX(ball.getVelX());
 		ball.changeY(ball.getVelY());
